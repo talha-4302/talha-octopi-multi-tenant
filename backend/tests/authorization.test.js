@@ -61,3 +61,37 @@ describe('the permission matrix, enforced server side', () => {
     }
   });
 });
+
+const ADMIN_ONLY = [
+  { method: 'get',  path: '/api/admin/orgs' },
+  { method: 'get',  path: '/api/admin/stats' },
+  { method: 'get',  path: '/api/admin/transactions' },
+  { method: 'get',  path: '/api/admin/plans' },
+  { method: 'post', path: '/api/admin/plans' },
+];
+
+describe('the admin surface is PLATFORM_ADMIN only', () => {
+  for (const route of ADMIN_ONLY) {
+    it(`ORG_ADMIN may NOT ${route.method.toUpperCase()} ${route.path}`, async () => {
+      const res = await api()[route.method](route.path)
+        .set('Authorization', `Bearer ${ctx[ROLES.ORG_ADMIN]}`).send({});
+      expect(res.status).toBe(403);
+    });
+
+    it(`ORG_MEMBER may NOT ${route.method.toUpperCase()} ${route.path}`, async () => {
+      const res = await api()[route.method](route.path)
+        .set('Authorization', `Bearer ${ctx[ROLES.ORG_MEMBER]}`).send({});
+      expect(res.status).toBe(403);
+    });
+
+    it(`PLATFORM_ADMIN may ${route.method.toUpperCase()} ${route.path}`, async () => {
+      const res = await api()[route.method](route.path)
+        .set('Authorization', `Bearer ${ctx[ROLES.PLATFORM_ADMIN]}`).send({});
+      expect(res.status).not.toBe(403);
+    });
+
+    it(`no token is 401 on ${route.method.toUpperCase()} ${route.path}`, async () => {
+      expect((await api()[route.method](route.path).send({})).status).toBe(401);
+    });
+  }
+});
