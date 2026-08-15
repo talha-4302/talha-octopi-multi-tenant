@@ -41,6 +41,10 @@ export async function runMigrations() {
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+export function isMainModule(argv1) {
+  return Boolean(argv1) && import.meta.url === pathToFileURL(argv1).href;
+}
+
+if (isMainModule(process.argv[1])) {
   runMigrations().catch((err) => { console.error(err); process.exit(1); });
 }
