@@ -15,25 +15,20 @@ describe('isMainModule', () => {
     expect(isMainModule('/some/other/file.js')).toBe(false);
   });
 
-  it('returns true when argv[1] round-trips correctly through pathToFileURL', () => {
-    // Get the path to this test file (in URL form)
-    const thisFileUrl = import.meta.url;
-
-    // Convert it to the argv[1] style path (what process.argv[1] would be)
-    const asArgv1 = fileURLToPath(thisFileUrl);
-
-    // Convert it back to a URL via pathToFileURL
-    const reconstructed = pathToFileURL(asArgv1).href;
-
-    // They should match - this is the key invariant the guard relies on
-    expect(reconstructed).toBe(thisFileUrl);
-
-    // Test isMainModule with a URL that matches import.meta.url of some file
-    // Since the real guard checks import.meta.url inside migrate.js, we simulate
-    // by getting a file's URL and converting its path representation back
-    const migrateUrl = 'file:///E:/Career/CVs%20and%20Applied%20Jobs/Octopi%20DIgital/Assessment/backend/src/db/migrate.js';
+  it('returns true for a path that resolves to migrate.js\'s own module URL', () => {
+    // migrate.js's real import.meta.url, computed relative to this test file,
+    // not hardcoded, so it's correct on any machine or CI runner.
+    const migrateUrl = new URL('../src/db/migrate.js', import.meta.url).href;
     const migratePath = fileURLToPath(migrateUrl);
-    const migrateReconstructed = pathToFileURL(migratePath).href;
-    expect(migrateReconstructed).toBe(migrateUrl);
+
+    // isMainModule('src/db/migrate.js') is exactly what happens when
+    // `node src/db/migrate.js` runs migrate.js directly, since node populates
+    // process.argv[1] with the path as given on the command line and
+    // migrate.js's own import.meta.url is always this same absolute URL.
+    // We can't literally reproduce "argv1 is relative to cwd" here without a
+    // child process, but we CAN prove the exact invariant the guard depends on:
+    // fileURLToPath(migrateUrl) round-tripped through pathToFileURL must equal
+    // migrateUrl, and isMainModule must return true for it.
+    expect(isMainModule(migratePath)).toBe(true);
   });
 });
