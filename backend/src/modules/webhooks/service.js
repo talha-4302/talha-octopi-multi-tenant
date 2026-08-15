@@ -3,6 +3,19 @@ import * as repo from './repository.js';
 
 const toDate = (u) => (u ? new Date(u * 1000) : null);
 
+// Recent Stripe API versions moved current_period_start/end off the
+// Subscription object and onto each subscription item. This app only ever
+// puts one price on a subscription, so the first item is the only one that
+// matters. Older API versions (and this app's test fixtures) still carry the
+// fields at the top level, so that stays the fallback.
+const periodOf = (stripeSub) => {
+  const item = stripeSub.items?.data?.[0];
+  return {
+    periodStart: toDate(item?.current_period_start ?? stripeSub.current_period_start),
+    periodEnd: toDate(item?.current_period_end ?? stripeSub.current_period_end),
+  };
+};
+
 // Every Stripe read happens in the controller BEFORE the transaction opens.
 // This only writes rows with values it is handed.
 export async function applyCheckoutCompleted(client, { session, stripeSub, invoice }) {
@@ -17,8 +30,7 @@ export async function applyCheckoutCompleted(client, { session, stripeSub, invoi
   await repo.activateSubscription(client, {
     id: subscriptionId,
     stripeSubscriptionId: stripeSub.id,
-    periodStart: toDate(stripeSub.current_period_start),
-    periodEnd: toDate(stripeSub.current_period_end),
+    ...periodOf(stripeSub),
   });
   await repo.activateOrganization(client, orgId);
 
@@ -68,8 +80,7 @@ export async function applySubscriptionUpdated(client, stripeSub) {
   await repo.syncSubscription(client, {
     id: sub.id,
     status: stripeSub.status === 'unpaid' ? SUBSCRIPTION_STATUS.FAILED : null,
-    periodStart: toDate(stripeSub.current_period_start),
-    periodEnd: toDate(stripeSub.current_period_end),
+    ...periodOf(stripeSub),
     cancelAtPeriodEnd: stripeSub.cancel_at_period_end,
   });
   return null;
