@@ -4,14 +4,35 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "migrate": "node src/db/migrate.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src tests"
   },
   "dependencies": {
-    "express": "^5.2.1",
-    "nodemon": "^3.1.14",
-    "stripe": "^22.5.0"
+    "express": "^5.0.0",
+    "pg": "^8.11.0",
+    "zod": "^3.22.0",
+    "jsonwebtoken": "^8.5.1",
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.0",
+    "stripe": "^22.5.0",
+    "resend": "^3.0.0",
+    "dotenv": "^16.3.0",
+    "node-cron": "^3.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.4",
+    "supertest": "^6.3.3",
+    "eslint": "^8.54.0",
+    "nodemon": "^3.1.14"
   }
 }
