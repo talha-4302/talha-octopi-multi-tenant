@@ -11,7 +11,7 @@ import { meRouter } from './modules/me/routes.js';
 import { orgRouter } from './modules/orgs/routes.js';
 import { membersRouter } from './modules/members/routes.js';
 import { transactionsRouter } from './modules/transactions/routes.js';
-import { subscriptionRouter } from './modules/subscriptions/routes.js';
+import { subscriptionRouter, billingRouter } from './modules/subscriptions/routes.js';
 import { plansRouter } from './modules/plans/routes.js';
 import { webhookRouter } from './modules/webhooks/routes.js';
 
@@ -32,6 +32,7 @@ app.use('/api/org', orgRouter);
 app.use('/api/members', membersRouter);
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/subscription', subscriptionRouter);
+app.use('/api/billing', billingRouter);
 app.use('/api/plans', plansRouter);
 
 // Feature routers mount here as later tasks add them.
