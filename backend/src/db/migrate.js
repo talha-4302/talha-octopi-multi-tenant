@@ -1,6 +1,6 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import pg from 'pg';
 import { env } from '../config/env.js';
 
@@ -41,6 +41,6 @@ export async function runMigrations() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runMigrations().catch((err) => { console.error(err); process.exit(1); });
 }
