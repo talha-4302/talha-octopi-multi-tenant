@@ -1,122 +1,98 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { ROLES } from './lib/constants.js';
+import { ProtectedRoute } from './auth/ProtectedRoute.jsx';
+import { useAuth, homeFor } from './auth/AuthProvider.jsx';
+import { PlatformLayout } from './layouts/PlatformLayout.jsx';
+import { OrgLayout } from './layouts/OrgLayout.jsx';
+import { MemberLayout } from './layouts/MemberLayout.jsx';
 
-function App() {
-  const [count, setCount] = useState(0)
+import { Landing } from './pages/public/Landing.jsx';
+import { Signup } from './pages/public/Signup.jsx';
+import { Login } from './pages/public/Login.jsx';
+import { ForgotPassword } from './pages/public/ForgotPassword.jsx';
+import { ResetPassword } from './pages/public/ResetPassword.jsx';
+import { AcceptInvite } from './pages/public/AcceptInvite.jsx';
+import { CheckoutSuccess } from './pages/public/CheckoutSuccess.jsx';
+import { CheckoutCancelled } from './pages/public/CheckoutCancelled.jsx';
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+import { OrgDashboard } from './pages/org/Dashboard.jsx';
+import { OrgProfile } from './pages/org/Profile.jsx';
+import { Members } from './pages/org/Members.jsx';
+import { Subscription } from './pages/org/Subscription.jsx';
+import { Billing } from './pages/org/Billing.jsx';
+import { OrgTransactions } from './pages/org/Transactions.jsx';
 
-      <div className="ticks"></div>
+import { MemberProfile } from './pages/member/Profile.jsx';
+import { MemberOrgInfo } from './pages/member/OrgInfo.jsx';
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+import { Overview } from './pages/platform/Overview.jsx';
+import { Orgs } from './pages/platform/Orgs.jsx';
+import { OrgDetail } from './pages/platform/OrgDetail.jsx';
+import { Plans } from './pages/platform/Plans.jsx';
+import { PlatformTransactions } from './pages/platform/Transactions.jsx';
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+function Home() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="p-8 text-slate-500">Loading…</div>;
+  return user ? <Navigate to={homeFor(user.role)} replace /> : <Landing />;
 }
 
-export default App
+export function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/accept-invite" element={<AcceptInvite />} />
+      <Route path="/checkout/success" element={<CheckoutSuccess />} />
+      <Route path="/checkout/cancelled" element={<CheckoutCancelled />} />
+
+      <Route
+        path="/app"
+        element={
+          <ProtectedRoute allow={[ROLES.ORG_ADMIN]}>
+            <OrgLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<OrgDashboard />} />
+        <Route path="profile" element={<OrgProfile />} />
+        <Route path="members" element={<Members />} />
+        <Route path="subscription" element={<Subscription />} />
+        <Route path="billing" element={<Billing />} />
+        <Route path="transactions" element={<OrgTransactions />} />
+      </Route>
+
+      <Route
+        path="/member"
+        element={
+          <ProtectedRoute allow={[ROLES.ORG_MEMBER]}>
+            <MemberLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<MemberProfile />} />
+        <Route path="org" element={<MemberOrgInfo />} />
+      </Route>
+
+      <Route
+        path="/platform"
+        element={
+          <ProtectedRoute allow={[ROLES.PLATFORM_ADMIN]}>
+            <PlatformLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Overview />} />
+        <Route path="orgs" element={<Orgs />} />
+        <Route path="orgs/:orgId" element={<OrgDetail />} />
+        <Route path="plans" element={<Plans />} />
+        <Route path="transactions" element={<PlatformTransactions />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
