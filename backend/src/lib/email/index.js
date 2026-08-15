@@ -5,3 +5,4 @@ export const sendPaymentSucceeded = async () => {};
 export const sendPaymentFailed = async () => {};
 export const sendSubscriptionCancelled = async () => {};
 export const sendSubscriptionExpiring = async () => {};
+export const notify = async () => {};

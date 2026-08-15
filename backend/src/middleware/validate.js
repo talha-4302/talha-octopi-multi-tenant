@@ -17,7 +17,12 @@ export function validate(schemas) {
         return next(badRequest('Please check the highlighted fields.', fields));
       }
       // Zod objects strip unknown keys by default, so this also removes smuggled fields.
-      req[part] = result.data;
+      // req.query is a getter-only accessor in Express 5, so a plain assignment throws.
+      if (part === 'query') {
+        Object.defineProperty(req, 'query', { value: result.data, writable: true, configurable: true });
+      } else {
+        req[part] = result.data;
+      }
     }
     return next();
   };
