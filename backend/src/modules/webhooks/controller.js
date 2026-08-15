@@ -6,6 +6,14 @@ import { notify } from '../../lib/email/index.js';
 import * as repo from './repository.js';
 import * as service from './service.js';
 
+// Renewal events carry no orgId in their own metadata, so the tenant is
+// recovered from the Stripe subscription's metadata instead.
+async function orgIdForSubscription(stripeSubscriptionId) {
+  if (!stripeSubscriptionId) return null;
+  const sub = await stripe.subscriptions.retrieve(stripeSubscriptionId);
+  return sub.metadata?.orgId ?? null;
+}
+
 // Each handler: resolve the tenant, do Stripe reads BEFORE the transaction,
 // return { orgId, transactionId?, apply(client) }.
 const HANDLERS = {
@@ -18,6 +26,39 @@ const HANDLERS = {
       orgId, transactionId,
       apply: (c) => service.applyCheckoutCompleted(c, { session, stripeSub, invoice }),
     };
+  },
+
+  'invoice.paid': async (invoice) => {
+    // The first invoice fires alongside checkout.session.completed. Handling both
+    // would write two SUCCESS transactions for one charge.
+    if (invoice.billing_reason === 'subscription_create') return null;
+    const orgId = invoice.metadata?.orgId ?? await orgIdForSubscription(invoice.subscription);
+    if (!orgId) return null;
+    return { orgId, apply: (c) => service.applyInvoicePaid(c, invoice) };
+  },
+
+  'invoice.payment_failed': async (invoice) => {
+    const orgId = invoice.metadata?.orgId ?? await orgIdForSubscription(invoice.subscription);
+    if (!orgId) return null;
+    return { orgId, apply: (c) => service.applyInvoiceFailed(c, invoice) };
+  },
+
+  'customer.subscription.updated': async (sub) => {
+    const orgId = sub.metadata?.orgId ?? await orgIdForSubscription(sub.id);
+    if (!orgId) return null;
+    return { orgId, apply: (c) => service.applySubscriptionUpdated(c, sub) };
+  },
+
+  'customer.subscription.deleted': async (sub) => {
+    const orgId = sub.metadata?.orgId ?? await orgIdForSubscription(sub.id);
+    if (!orgId) return null;
+    return { orgId, apply: (c) => service.applySubscriptionDeleted(c, sub) };
+  },
+
+  'charge.refunded': async (charge) => {
+    const orgId = charge.metadata?.orgId;
+    if (!orgId) return null;
+    return { orgId, apply: (c) => service.applyChargeRefunded(c, charge) };
   },
 };
 
