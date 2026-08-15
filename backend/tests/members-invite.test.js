@@ -60,8 +60,17 @@ describe('GET /api/members', () => {
 });
 
 describe('POST /api/members', () => {
-  // Pending until Task 30 wires notify() to actually write notifications_log.
-  it.todo('creates an INVITED user with no password and logs the notification');
+  it('creates an INVITED user with no password and logs the notification', async () => {
+    const { orgId, token } = await org();
+    const res = await api().post('/api/members').set('Authorization', `Bearer ${token}`)
+      .send({ email: 'invited@example.com', name: 'Invited Person', role: ROLES.ORG_MEMBER });
+
+    expect(res.status).toBe(201);
+    const { rows } = await adminPool.query(
+      `SELECT * FROM notifications_log WHERE org_id = $1 AND kind = 'MEMBER_INVITED'`, [orgId]);
+    expect(rows).toHaveLength(1);
+    expect(rows[0].recipient_email).toBe('invited@example.com');
+  });
 
   it('creates an INVITED user with no password', async () => {
     const { token } = await org();

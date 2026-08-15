@@ -13,6 +13,7 @@ import { membersRouter } from './modules/members/routes.js';
 import { transactionsRouter } from './modules/transactions/routes.js';
 import { subscriptionRouter } from './modules/subscriptions/routes.js';
 import { plansRouter } from './modules/plans/routes.js';
+import { webhookRouter } from './modules/webhooks/routes.js';
 
 export const app = express();
 
@@ -20,8 +21,7 @@ app.use(helmet());
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(cookieParser());
 
-// 2. Webhook route mounts HERE, before express.json(). Added in Task 26.
-
+app.use('/api/webhooks', webhookRouter);   // BEFORE express.json(). Order is load-bearing.
 app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
