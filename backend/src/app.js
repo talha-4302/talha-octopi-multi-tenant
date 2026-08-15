@@ -14,6 +14,7 @@ import { transactionsRouter } from './modules/transactions/routes.js';
 import { subscriptionRouter, billingRouter } from './modules/subscriptions/routes.js';
 import { plansRouter } from './modules/plans/routes.js';
 import { webhookRouter } from './modules/webhooks/routes.js';
+import { adminRouter } from './modules/admin/routes.js';
 
 export const app = express();
 
@@ -34,8 +35,7 @@ app.use('/api/transactions', transactionsRouter);
 app.use('/api/subscription', subscriptionRouter);
 app.use('/api/billing', billingRouter);
 app.use('/api/plans', plansRouter);
-
-// Feature routers mount here as later tasks add them.
+app.use('/api/admin', adminRouter);
 
 app.use((req, res, next) => next(notFound()));
 app.use(errorHandler);

@@ -42,4 +42,4 @@ export const revokeToken = async (raw) => {
   if (row) await repo.revokeById(row.id);
 };
 export const revokeAllForUser = repo.revokeAllForUser;
-export const revokeAllForOrg = repo.revokeAllForOrg;
+export const revokeAllForUsers = repo.revokeAllForUsers;

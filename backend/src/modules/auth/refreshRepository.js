@@ -33,9 +33,11 @@ export async function revokeAllForUser(userId) {
       WHERE user_id = $1 AND revoked_at IS NULL`, [userId]);
 }
 
-export async function revokeAllForOrg(orgId) {
+// Takes ids rather than an org id: users is RLS-scoped and this file has no
+// tenant transaction to scope it with. The caller resolves membership first.
+export async function revokeAllForUsers(userIds) {
+  if (!userIds.length) return;
   await appPool.query(
     `UPDATE refresh_tokens SET revoked_at = now()
-      WHERE revoked_at IS NULL
-        AND user_id IN (SELECT id FROM users WHERE org_id = $1)`, [orgId]);
+      WHERE revoked_at IS NULL AND user_id = ANY($1::uuid[])`, [userIds]);
 }
