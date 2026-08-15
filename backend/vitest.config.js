@@ -8,5 +8,6 @@ export default defineConfig({
     poolOptions: { threads: { singleThread: true } },
     setupFiles: ['./tests/setup.js'],
     testTimeout: 20000,
+    hookTimeout: 30000,
   },
 });
