@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFound } from './lib/errors.js';
+import { authRouter } from './modules/auth/routes.js';
+import { meRouter } from './modules/me/routes.js';
 
 export const app = express();
 
@@ -18,6 +20,9 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+
+app.use('/api/auth', authRouter);
+app.use('/api/me', meRouter);
 
 // Feature routers mount here as later tasks add them.
 
