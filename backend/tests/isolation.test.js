@@ -3,6 +3,10 @@ import { appPool, adminPool } from '../src/db/pool.js';
 import { withTenant } from '../src/db/withTenant.js';
 import { seedOrg, getPlan } from './helpers/db.js';
 import { randomUUID } from 'node:crypto';
+import { api } from './helpers/http.js';
+import { makeUser, makeSubscription, makeTransaction } from './helpers/factories.js';
+import { signAccessToken } from '../src/lib/jwt.js';
+import { ROLES } from '../src/lib/constants.js';
 
 describe('the connection under test', () => {
   it('is app_user, is not a superuser, and does not own the tables', async () => {
@@ -115,5 +119,49 @@ describe('RLS at the database layer', () => {
 
     const { rows } = await adminPool.query('SELECT * FROM transactions');
     expect(rows).toHaveLength(0);
+  });
+});
+
+describe('tenant isolation at the HTTP layer', () => {
+  async function twoOrgs() {
+    const plan = await getPlan('Pro');
+    const a = await seedOrg({ name: 'Alpha' });
+    const b = await seedOrg({ name: 'Beta' });
+    for (const o of [a, b]) await makeSubscription({ orgId: o.orgId, plan });
+    const aAdmin = await makeUser({ orgId: a.orgId, role: ROLES.ORG_ADMIN });
+    const bMember = await makeUser({ orgId: b.orgId, role: ROLES.ORG_MEMBER });
+    await makeTransaction({ orgId: b.orgId, plan });
+    return {
+      a, b, bMember, plan,
+      aToken: signAccessToken({ userId: aAdmin.id, orgId: a.orgId, role: ROLES.ORG_ADMIN }),
+    };
+  }
+
+  it('shows an admin only their own members', async () => {
+    const { aToken } = await twoOrgs();
+    const res = await api().get('/api/members').set('Authorization', `Bearer ${aToken}`);
+    expect(res.body.data).toHaveLength(1);
+  });
+
+  it('shows an admin only their own transactions', async () => {
+    const { aToken } = await twoOrgs();
+    const res = await api().get('/api/transactions').set('Authorization', `Bearer ${aToken}`);
+    expect(res.body.data).toHaveLength(0);
+  });
+
+  it('shows an admin only their own organization name', async () => {
+    const { aToken } = await twoOrgs();
+    const res = await api().get('/api/org').set('Authorization', `Bearer ${aToken}`);
+    expect(res.body.name).toBe('Alpha');
+  });
+
+  it('answers 404 for another tenant member id and leaves the row untouched', async () => {
+    const { aToken, bMember } = await twoOrgs();
+    const res = await api().patch(`/api/members/${bMember.id}`)
+      .set('Authorization', `Bearer ${aToken}`).send({ role: ROLES.ORG_ADMIN });
+
+    expect(res.status).toBe(404);
+    const { rows } = await adminPool.query('SELECT role FROM users WHERE id = $1', [bMember.id]);
+    expect(rows[0].role).toBe(ROLES.ORG_MEMBER);
   });
 });
