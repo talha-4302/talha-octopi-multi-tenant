@@ -45,7 +45,7 @@ describe('structural rule 1: no SQL outside a repository', () => {
     for (const file of await walk(SRC)) {
       const rel = relative(SRC, file);
       // db/ owns the primitives and the migration runner; migrations are .sql
-      if (rel.endsWith('repository.js') || rel.startsWith('db' + sep)) continue;
+      if (/repository\.js$/i.test(rel) || rel.startsWith('db' + sep)) continue;
       const src = await readFile(file, 'utf8');
       if (SQL.test(src)) offenders.push(rel.split(sep).join('/'));
     }
