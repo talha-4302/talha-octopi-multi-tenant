@@ -8,6 +8,10 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { notFound } from './lib/errors.js';
 import { authRouter } from './modules/auth/routes.js';
 import { meRouter } from './modules/me/routes.js';
+import { orgRouter } from './modules/orgs/routes.js';
+import { membersRouter } from './modules/members/routes.js';
+import { transactionsRouter } from './modules/transactions/routes.js';
+import { subscriptionRouter } from './modules/subscriptions/routes.js';
 
 export const app = express();
 
@@ -23,6 +27,10 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/api/auth', authRouter);
 app.use('/api/me', meRouter);
+app.use('/api/org', orgRouter);
+app.use('/api/members', membersRouter);
+app.use('/api/transactions', transactionsRouter);
+app.use('/api/subscription', subscriptionRouter);
 
 // Feature routers mount here as later tasks add them.
 
