@@ -15,6 +15,15 @@ export async function truncateAll() {
 export async function getPlan(name = 'Starter') {
   const { rows } = await adminPool.query('SELECT * FROM plans WHERE name = $1', [name]);
   if (!rows[0]) throw new Error(`seed plan ${name} missing, run migrations`);
+  // Seeded plans have NULL Stripe ids by design (filled in by sync:plans against
+  // real Stripe). Tests fake one here, once, so checkout has something to reference.
+  if (!rows[0].stripe_price_id) {
+    const { rows: synced } = await adminPool.query(
+      `UPDATE plans SET stripe_price_id = 'price_test_' || id,
+              stripe_product_id = COALESCE(stripe_product_id, 'prod_test_' || id)
+        WHERE id = $1 RETURNING *`, [rows[0].id]);
+    return synced[0];
+  }
   return rows[0];
 }
 

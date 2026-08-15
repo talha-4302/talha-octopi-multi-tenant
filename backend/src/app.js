@@ -12,6 +12,7 @@ import { orgRouter } from './modules/orgs/routes.js';
 import { membersRouter } from './modules/members/routes.js';
 import { transactionsRouter } from './modules/transactions/routes.js';
 import { subscriptionRouter } from './modules/subscriptions/routes.js';
+import { plansRouter } from './modules/plans/routes.js';
 
 export const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/org', orgRouter);
 app.use('/api/members', membersRouter);
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/subscription', subscriptionRouter);
+app.use('/api/plans', plansRouter);
 
 // Feature routers mount here as later tasks add them.
 
