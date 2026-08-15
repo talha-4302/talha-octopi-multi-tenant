@@ -31,3 +31,13 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+
+#agentic
+.agents
+.claude
+CLAUDE.md  
+skills-lock.json
+Docs
+
+
