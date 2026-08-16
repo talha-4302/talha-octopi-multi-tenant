@@ -11,6 +11,7 @@
     "start": "node src/index.js",
     "migrate": "node src/db/migrate.js",
     "sync:plans": "node scripts/syncPlans.js",
+    "seed": "node scripts/seed.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src tests"
