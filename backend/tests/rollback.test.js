@@ -4,7 +4,7 @@ import { stripe } from '../src/lib/stripe.js';
 import { seedOrg, getPlan } from './helpers/db.js';
 import { makeSubscription, makeTransaction, makeUser } from './helpers/factories.js';
 import { postWebhook, checkoutCompleted } from './helpers/stripeEvents.js';
-import * as webhookRepo from '../src/modules/webhooks/repository.js';
+import * as webhookRepo from '../src/modules/webhooks/webhooks.repository.js';
 import {
   ORG_STATUS, SUBSCRIPTION_STATUS, TRANSACTION_STATUS, ROLES,
 } from '../src/lib/constants.js';

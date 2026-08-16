@@ -1,6 +1,6 @@
 // one_time_tokens has RLS off, so appPool is correct here.
-import { appPool } from '../../db/pool.js';
-import { randomToken } from '../../lib/tokens.js';
+import { appPool } from '../../../db/pool.js';
+import { randomToken } from '../../../lib/tokens.js';
 
 export async function invalidateUnused(userId, purpose) {
   await appPool.query(

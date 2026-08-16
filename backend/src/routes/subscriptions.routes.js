@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { authenticate } from '../../middleware/authenticate.js';
-import { requireOrgStatus } from '../../middleware/requireOrgStatus.js';
-import { authorize } from '../../middleware/authorize.js';
-import { validate } from '../../middleware/validate.js';
-import { ROLES, ORG_GATE } from '../../lib/constants.js';
-import { checkoutSchema, changePlanSchema } from './schema.js';
-import * as controller from './controller.js';
+import { authenticate } from '../middleware/authenticate.js';
+import { requireOrgStatus } from '../middleware/requireOrgStatus.js';
+import { authorize } from '../middleware/authorize.js';
+import { validate } from '../middleware/validate.js';
+import { ROLES, ORG_GATE } from '../lib/constants.js';
+import { checkoutSchema, changePlanSchema } from '../modules/subscriptions/subscriptions.schema.js';
+import * as controller from '../modules/subscriptions/subscriptions.controller.js';
 
 export const subscriptionRouter = Router();
 subscriptionRouter.use(authenticate);
@@ -22,8 +22,3 @@ subscriptionRouter.post('/change', requireOrgStatus(...ORG_GATE.OPERATING),
 
 subscriptionRouter.post('/cancel', requireOrgStatus(...ORG_GATE.OPERATING),
   authorize(ROLES.ORG_ADMIN), controller.cancelSubscription);
-
-// Separate router so the path is /api/billing/portal
-export const billingRouter = Router();
-billingRouter.use(authenticate, requireOrgStatus(...ORG_GATE.BILLABLE), authorize(ROLES.ORG_ADMIN));
-billingRouter.post('/portal', controller.createPortalSession);

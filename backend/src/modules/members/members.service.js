@@ -5,11 +5,11 @@ import {
   ROLES, ERROR_CODE, USER_STATUS, TOKEN_PURPOSE, NOTIFICATION_KIND, PG_UNIQUE_VIOLATION,
 } from '../../lib/constants.js';
 import { offsetOf, envelope } from '../../lib/pagination.js';
-import { createOneTimeToken } from '../auth/tokenRepository.js';
-import { INVITE_TTL_MS } from '../auth/service.js';
-import { revokeAllForUser } from '../auth/refreshService.js';
+import { createOneTimeToken } from '../auth/tokens/one-time.repository.js';
+import { INVITE_TTL_MS } from '../auth/auth.service.js';
+import { revokeAllForUser } from '../auth/tokens/refresh.service.js';
 import { notify } from '../../lib/email/index.js';
-import * as repo from './repository.js';
+import * as repo from './members.repository.js';
 
 const shape = (u) => ({
   id: u.id, email: u.email, name: u.name,

@@ -7,9 +7,9 @@ import { notFound, badRequest, conflict } from '../../lib/errors.js';
 import {
   ERROR_CODE, ORG_STATUS, NOTIFICATION_KIND, SUBSCRIPTION_STATUS,
 } from '../../lib/constants.js';
-import * as plansRepo from '../plans/repository.js';
+import * as plansRepo from '../plans/plans.repository.js';
 import { notify } from '../../lib/email/index.js';
-import * as repo from './repository.js';
+import * as repo from './subscriptions.repository.js';
 
 export const shapeSubscription = (s) => ({
   id: s.id,

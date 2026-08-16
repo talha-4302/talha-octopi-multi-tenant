@@ -1,5 +1,5 @@
 import { appPool } from '../src/db/pool.js';
-import * as plansRepo from '../src/modules/plans/repository.js';
+import * as plansRepo from '../src/modules/plans/plans.repository.js';
 import { syncPlanToStripe } from '../src/lib/stripeSync.js';
 
 const plans = await plansRepo.findAll(appPool);

@@ -99,7 +99,7 @@ describe('POST /api/auth/register', () => {
     // Force the second insert to violate the unique email constraint mid transaction.
     const { orgId } = await seedOrg({ name: 'Other' });
     await makeUser({ orgId, email: 'race@acme.test' });
-    vi.spyOn(await import('../src/modules/registration/repository.js'), 'insertUser')
+    vi.spyOn(await import('../src/modules/registration/registration.repository.js'), 'insertUser')
       .mockRejectedValueOnce(Object.assign(new Error('dup'), { code: '23505' }));
 
     const res = await signup({ email: 'race2@acme.test' });

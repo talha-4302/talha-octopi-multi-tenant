@@ -1,5 +1,5 @@
 import { SUBSCRIPTION_STATUS, TRANSACTION_STATUS, NOTIFICATION_KIND } from '../../lib/constants.js';
-import * as repo from './repository.js';
+import * as repo from './webhooks.repository.js';
 
 const toDate = (u) => (u ? new Date(u * 1000) : null);
 

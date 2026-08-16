@@ -1,7 +1,7 @@
 import { withTenant } from '../../db/withTenant.js';
 import { notFound, conflict } from '../../lib/errors.js';
 import { ROLES, ERROR_CODE, PG_UNIQUE_VIOLATION } from '../../lib/constants.js';
-import * as repo from './repository.js';
+import * as repo from './orgs.repository.js';
 
 export async function getOrg({ orgId, role }) {
   // The branch is here, once, rather than as a filter applied after loading everything.

@@ -21,11 +21,11 @@ const ALLOWED_ADMIN_POOL = [
   join('db', 'pool.js'),
   join('modules', 'admin'),
   join('jobs'),
-  join('modules', 'auth', 'repository.js'),
+  join('modules', 'auth', 'auth.repository.js'),
 ];
 
 describe('structural rule 4: the privileged pool stays where it was specified', () => {
-  it('is imported only by modules/admin, jobs, and modules/auth/repository.js', async () => {
+  it('is imported only by modules/admin, jobs, and modules/auth/auth.repository.js', async () => {
     const offenders = [];
     for (const file of await walk(SRC)) {
       const rel = relative(SRC, file);

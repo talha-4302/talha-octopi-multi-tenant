@@ -1,4 +1,4 @@
-import * as service from './service.js';
+import * as service from './me.service.js';
 
 export const getMe = async (req, res, next) => {
   try { res.json(await service.getMe(req.user)); } catch (e) { next(e); }

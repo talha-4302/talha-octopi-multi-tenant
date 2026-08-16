@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { validate } from '../../middleware/validate.js';
-import { authLimiter, strictLimiter } from '../../middleware/rateLimit.js';
-import { loginSchema, forgotSchema, resetSchema, acceptInviteSchema, tokenParamSchema } from './schema.js';
-import { registerSchema } from '../registration/schema.js';
-import * as registrationController from '../registration/controller.js';
-import * as controller from './controller.js';
+import { validate } from '../middleware/validate.js';
+import { authLimiter, strictLimiter } from '../middleware/rateLimit.js';
+import {
+  loginSchema, forgotSchema, resetSchema, acceptInviteSchema, tokenParamSchema,
+} from '../modules/auth/auth.schema.js';
+import { registerSchema } from '../modules/registration/registration.schema.js';
+import * as registrationController from '../modules/registration/registration.controller.js';
+import * as controller from '../modules/auth/auth.controller.js';
 
 export const authRouter = Router();
 

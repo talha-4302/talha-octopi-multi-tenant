@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { authenticate } from '../../middleware/authenticate.js';
-import { requireOrgStatus } from '../../middleware/requireOrgStatus.js';
-import { authorize } from '../../middleware/authorize.js';
-import { validate } from '../../middleware/validate.js';
-import { ROLES, ORG_GATE } from '../../lib/constants.js';
-import { listTransactionsSchema } from './schema.js';
-import * as controller from './controller.js';
+import { authenticate } from '../middleware/authenticate.js';
+import { requireOrgStatus } from '../middleware/requireOrgStatus.js';
+import { authorize } from '../middleware/authorize.js';
+import { validate } from '../middleware/validate.js';
+import { ROLES, ORG_GATE } from '../lib/constants.js';
+import { listTransactionsSchema } from '../modules/transactions/transactions.schema.js';
+import * as controller from '../modules/transactions/transactions.controller.js';
 
 export const transactionsRouter = Router();
 

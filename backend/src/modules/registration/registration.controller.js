@@ -1,4 +1,4 @@
-import * as service from './service.js';
+import * as service from './registration.service.js';
 import { setRefreshCookie } from '../../lib/cookies.js';
 
 export async function register(req, res, next) {

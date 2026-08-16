@@ -1,7 +1,7 @@
 import { offsetOf, envelope } from '../../lib/pagination.js';
 import { notFound } from '../../lib/errors.js';
-import { revokeAllForUsers } from '../auth/refreshService.js';
-import * as repo from './repository.js';
+import { revokeAllForUsers } from '../auth/tokens/refresh.service.js';
+import * as repo from './admin.repository.js';
 
 const shapeOrgRow = (o) => ({
   id: o.id, name: o.name, status: o.status, planName: o.plan_name,

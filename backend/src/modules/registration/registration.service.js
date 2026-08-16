@@ -6,11 +6,11 @@ import { env } from '../../config/env.js';
 import { hashPassword } from '../../lib/password.js';
 import { badRequest, conflict } from '../../lib/errors.js';
 import { ERROR_CODE, PG_UNIQUE_VIOLATION } from '../../lib/constants.js';
-import * as plansRepo from '../plans/repository.js';
-import * as authRepo from '../auth/repository.js';
-import { tokenFor, publicUser } from '../auth/service.js';
-import { issueRefreshToken } from '../auth/refreshService.js';
-import * as repo from './repository.js';
+import * as plansRepo from '../plans/plans.repository.js';
+import * as authRepo from '../auth/auth.repository.js';
+import { tokenFor, publicUser } from '../auth/auth.service.js';
+import { issueRefreshToken } from '../auth/tokens/refresh.service.js';
+import * as repo from './registration.repository.js';
 
 export async function register({ organizationName, name, email, password, planId }) {
   // Availability read, so the ordinary duplicate case never reaches Stripe.

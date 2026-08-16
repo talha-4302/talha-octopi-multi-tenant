@@ -6,15 +6,16 @@ import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFound } from './lib/errors.js';
-import { authRouter } from './modules/auth/routes.js';
-import { meRouter } from './modules/me/routes.js';
-import { orgRouter } from './modules/orgs/routes.js';
-import { membersRouter } from './modules/members/routes.js';
-import { transactionsRouter } from './modules/transactions/routes.js';
-import { subscriptionRouter, billingRouter } from './modules/subscriptions/routes.js';
-import { plansRouter } from './modules/plans/routes.js';
-import { webhookRouter } from './modules/webhooks/routes.js';
-import { adminRouter } from './modules/admin/routes.js';
+import { authRouter } from './routes/auth.routes.js';
+import { meRouter } from './routes/me.routes.js';
+import { orgRouter } from './routes/orgs.routes.js';
+import { membersRouter } from './routes/members.routes.js';
+import { transactionsRouter } from './routes/transactions.routes.js';
+import { subscriptionRouter } from './routes/subscriptions.routes.js';
+import { billingRouter } from './routes/billing.routes.js';
+import { plansRouter } from './routes/plans.routes.js';
+import { webhookRouter } from './routes/webhooks.routes.js';
+import { adminRouter } from './routes/admin.routes.js';
 
 export const app = express();
 

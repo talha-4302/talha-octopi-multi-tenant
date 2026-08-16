@@ -1,7 +1,7 @@
 import { withTenant } from '../db/withTenant.js';
 import { forbidden } from '../lib/errors.js';
 import { ERROR_CODE } from '../lib/constants.js';
-import * as orgRepo from '../modules/orgs/repository.js';
+import * as orgRepo from '../modules/orgs/orgs.repository.js';
 
 // Reads the organization status and rejects before any handler runs.
 // Every org-scoped route carries one of the three ORG_GATE tiers.

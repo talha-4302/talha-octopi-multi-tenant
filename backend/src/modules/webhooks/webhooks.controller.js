@@ -3,8 +3,8 @@ import { env } from '../../config/env.js';
 import { withTenant } from '../../db/withTenant.js';
 import { PG_UNIQUE_VIOLATION } from '../../lib/constants.js';
 import { notify } from '../../lib/email/index.js';
-import * as repo from './repository.js';
-import * as service from './service.js';
+import * as repo from './webhooks.repository.js';
+import * as service from './webhooks.service.js';
 
 // Renewal events carry no orgId in their own metadata, so the tenant is
 // recovered from the Stripe subscription's metadata instead.

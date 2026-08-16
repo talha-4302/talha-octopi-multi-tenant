@@ -1,4 +1,4 @@
-import * as service from './service.js';
+import * as service from './orgs.service.js';
 
 export const getOrg = async (req, res, next) => {
   try { res.json(await service.getOrg(req.user)); } catch (e) { next(e); }

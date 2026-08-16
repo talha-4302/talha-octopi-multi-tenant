@@ -1,5 +1,5 @@
-import * as service from './service.js';
-import * as plansService from '../plans/service.js';
+import * as service from './admin.service.js';
+import * as plansService from '../plans/plans.service.js';
 
 export const listOrgs = async (req, res, next) => {
   try { res.json(await service.listOrgs(req.query)); } catch (e) { next(e); }

@@ -2,9 +2,9 @@ import { withTenant } from '../../db/withTenant.js';
 import { verifyPassword, hashPassword } from '../../lib/password.js';
 import { unauthorized, notFound } from '../../lib/errors.js';
 import { ERROR_CODE } from '../../lib/constants.js';
-import * as repo from './repository.js';
-import * as authRepo from '../auth/repository.js';
-import * as refreshRepo from '../auth/refreshRepository.js';
+import * as repo from './me.repository.js';
+import * as authRepo from '../auth/auth.repository.js';
+import * as refreshRepo from '../auth/tokens/refresh.repository.js';
 
 const shape = (u) => ({ id: u.id, name: u.name, email: u.email, role: u.role, orgId: u.org_id });
 

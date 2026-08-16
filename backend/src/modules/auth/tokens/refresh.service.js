@@ -1,10 +1,10 @@
 import { randomUUID } from 'node:crypto';
-import { randomToken, hashToken } from '../../lib/tokens.js';
-import { unauthorized } from '../../lib/errors.js';
-import { ERROR_CODE } from '../../lib/constants.js';
-import { env } from '../../config/env.js';
-import * as repo from './refreshRepository.js';
-import * as authRepo from './repository.js';
+import { randomToken, hashToken } from '../../../lib/tokens.js';
+import { unauthorized } from '../../../lib/errors.js';
+import { ERROR_CODE } from '../../../lib/constants.js';
+import { env } from '../../../config/env.js';
+import * as repo from './refresh.repository.js';
+import * as authRepo from '../auth.repository.js';
 
 const expiry = () =>
   new Date(Date.now() + env.REFRESH_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000);

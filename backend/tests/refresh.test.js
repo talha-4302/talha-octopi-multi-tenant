@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { issueRefreshToken, rotateRefreshToken, revokeAllForUser }
-  from '../src/modules/auth/refreshService.js';
+  from '../src/modules/auth/tokens/refresh.service.js';
 import { seedOrg } from './helpers/db.js';
 import { makeUser } from './helpers/factories.js';
 import { ROLES } from '../src/lib/constants.js';

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { hashPassword, verifyPassword } from '../src/lib/password.js';
 import { randomToken, hashToken } from '../src/lib/tokens.js';
-import * as authRepo from '../src/modules/auth/repository.js';
+import * as authRepo from '../src/modules/auth/auth.repository.js';
 import { seedOrg } from './helpers/db.js';
 import { makeUser } from './helpers/factories.js';
 import { ROLES } from '../src/lib/constants.js';

@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import { authenticate } from '../../middleware/authenticate.js';
-import { authorize } from '../../middleware/authorize.js';
-import { validate } from '../../middleware/validate.js';
-import { ROLES } from '../../lib/constants.js';
+import { authenticate } from '../middleware/authenticate.js';
+import { authorize } from '../middleware/authorize.js';
+import { validate } from '../middleware/validate.js';
+import { ROLES } from '../lib/constants.js';
 import {
   listOrgsSchema, orgIdSchema, suspendSchema, platformTransactionsSchema,
   createPlanSchema, updatePlanSchema,
-} from './schema.js';
-import * as controller from './controller.js';
+} from '../modules/admin/admin.schema.js';
+import * as controller from '../modules/admin/admin.controller.js';
 
 export const adminRouter = Router();
 

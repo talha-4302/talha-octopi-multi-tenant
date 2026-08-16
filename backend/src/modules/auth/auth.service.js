@@ -3,9 +3,9 @@ import { signAccessToken } from '../../lib/jwt.js';
 import { hashToken } from '../../lib/tokens.js';
 import { unauthorized, badRequest } from '../../lib/errors.js';
 import { USER_STATUS, ERROR_CODE, TOKEN_PURPOSE } from '../../lib/constants.js';
-import * as authRepo from './repository.js';
-import { issueRefreshToken, rotateRefreshToken, revokeAllForUser } from './refreshService.js';
-import { createOneTimeToken, consume } from './tokenRepository.js';
+import * as authRepo from './auth.repository.js';
+import { issueRefreshToken, rotateRefreshToken, revokeAllForUser } from './tokens/refresh.service.js';
+import { createOneTimeToken, consume } from './tokens/one-time.repository.js';
 import { sendPasswordReset } from '../../lib/email/index.js';
 
 // Shape a user for the wire. The password hash never crosses this boundary.

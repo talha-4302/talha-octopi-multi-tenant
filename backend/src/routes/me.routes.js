@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { authenticate } from '../../middleware/authenticate.js';
-import { validate } from '../../middleware/validate.js';
-import { updateMeSchema, changePasswordSchema } from './schema.js';
-import * as controller from './controller.js';
+import { authenticate } from '../middleware/authenticate.js';
+import { validate } from '../middleware/validate.js';
+import { updateMeSchema, changePasswordSchema } from '../modules/me/me.schema.js';
+import * as controller from '../modules/me/me.controller.js';
 
 export const meRouter = Router();
 

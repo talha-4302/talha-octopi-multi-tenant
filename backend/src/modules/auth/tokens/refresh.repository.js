@@ -1,6 +1,6 @@
 // refresh_tokens has RLS off, keyed by user and reached only by presenting a token.
 // Uses appPool because this table is not governed by a tenant policy.
-import { appPool } from '../../db/pool.js';
+import { appPool } from '../../../db/pool.js';
 
 export async function insert({ userId, tokenHash, familyId, expiresAt }) {
   await appPool.query(

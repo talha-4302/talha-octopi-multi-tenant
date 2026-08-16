@@ -1,4 +1,4 @@
-import * as service from './service.js';
+import * as service from './members.service.js';
 
 export const listMembers = async (req, res, next) => {
   try { res.json(await service.listMembers(req.user, req.query)); } catch (e) { next(e); }

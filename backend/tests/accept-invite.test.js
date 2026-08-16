@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { api } from './helpers/http.js';
 import { seedOrg } from './helpers/db.js';
 import { makeUser } from './helpers/factories.js';
-import { createOneTimeToken } from '../src/modules/auth/tokenRepository.js';
+import { createOneTimeToken } from '../src/modules/auth/tokens/one-time.repository.js';
 import { TOKEN_PURPOSE, USER_STATUS } from '../src/lib/constants.js';
 
 async function anInvite() {

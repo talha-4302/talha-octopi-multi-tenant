@@ -2,7 +2,7 @@ import { appPool } from '../../db/pool.js';
 import { conflict, notFound } from '../../lib/errors.js';
 import { ERROR_CODE, PG_UNIQUE_VIOLATION } from '../../lib/constants.js';
 import { syncPlanToStripe } from '../../lib/stripeSync.js';
-import * as repo from './repository.js';
+import * as repo from './plans.repository.js';
 
 export const shapePlan = (p) => ({
   id: p.id, name: p.name, priceCents: p.price_cents, currency: p.currency,

@@ -1,6 +1,6 @@
 // HTTP only. No business logic below this line lives here.
-import * as service from './service.js';
-import { revokeToken } from './refreshService.js';
+import * as service from './auth.service.js';
+import { revokeToken } from './tokens/refresh.service.js';
 import { setRefreshCookie, clearRefreshCookie, readRefreshCookie } from '../../lib/cookies.js';
 
 export async function login(req, res, next) {

@@ -3,7 +3,7 @@ import { api } from './helpers/http.js';
 import { seedOrg } from './helpers/db.js';
 import { makeUser } from './helpers/factories.js';
 import { adminPool } from '../src/db/pool.js';
-import { createOneTimeToken } from '../src/modules/auth/tokenRepository.js';
+import { createOneTimeToken } from '../src/modules/auth/tokens/one-time.repository.js';
 import { TOKEN_PURPOSE, ROLES } from '../src/lib/constants.js';
 
 async function anAdmin() {

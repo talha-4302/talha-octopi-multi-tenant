@@ -1,6 +1,6 @@
 import { withTenant } from '../../db/withTenant.js';
 import { offsetOf, envelope } from '../../lib/pagination.js';
-import * as repo from './repository.js';
+import * as repo from './transactions.repository.js';
 
 export const shapeTransaction = (t) => ({
   id: t.id,
