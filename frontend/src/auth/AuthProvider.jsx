@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { api, setAccessToken, setUnauthenticatedHandler } from '../lib/api.js';
 import { ROLES } from '../lib/constants.js';
@@ -34,8 +34,17 @@ export function AuthProvider({ children }) {
 
   // On first load the access token is gone (memory only), but the httpOnly
   // refresh cookie may still be valid. One refresh restores the session.
+  //
+  // Refresh tokens are single use: a second call rotates a token the first
+  // call already rotated, trips reuse detection, and revokes the whole
+  // family (the first call's brand new token included). StrictMode's dev-only
+  // double-invoke of this effect fired exactly that pair on every reload, so
+  // this ref makes sure the request only ever goes out once per mount.
+  const didInit = useRef(false);
   useEffect(() => {
     setUnauthenticatedHandler(clear);
+    if (didInit.current) return;
+    didInit.current = true;
     (async () => {
       try {
         const data = await api.post('/auth/refresh');
